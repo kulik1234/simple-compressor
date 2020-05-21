@@ -46,7 +46,7 @@ public class Main {
 
             }
         }
-        ExecutorService executor = Executors.newFixedThreadPool(40);
+        ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()-1);
         File input = new File(INPUT_FOLDER);
         File[] filesToCompress = input.listFiles();
         for(File f : filesToCompress){
