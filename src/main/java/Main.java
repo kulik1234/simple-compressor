@@ -8,8 +8,8 @@ import java.util.concurrent.Executors;
 
 public class Main {
 
-    private String OUTPUT_FOLDER = ".";
-    private String INPUT_FOLDER = "./compressed";
+    private String OUTPUT_FOLDER = "./compressed";
+    private String INPUT_FOLDER = ".";
     private double COMPRESSION_LEVEL = 0.9;
     private double COMPRESSION_LEVEL_STEP = 0.01;
     private Long EXPECTED_SIZE = 500000L;
