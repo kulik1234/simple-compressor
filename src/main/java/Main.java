@@ -1,11 +1,10 @@
-import net.coobird.thumbnailator.Thumbnails;
-import net.coobird.thumbnailator.name.Rename;
+import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
 
 public class Main {
 
@@ -45,16 +44,35 @@ public class Main {
 
 
             }
+            if(args[i].equals("-S")) {
+                try {
+                    Long.parseLong(args[i+1]);
+                    COMPRESSION_LEVEL_STEP = Long.parseLong(args[i+1]);
+                    continue;
+                } catch (NumberFormatException e){
+                    System.out.println(e.getMessage());
+                }
+
+
+            }
         }
         ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()-1);
         File input = new File(INPUT_FOLDER);
         File[] filesToCompress = input.listFiles();
+        try{
         for(File f : filesToCompress){
             if(!f.isDirectory()){
+                List<String> extensions = new ArrayList<String>();
+                extensions.add("jpg");
+                extensions.add("jpeg");
+                extensions.add("png");
+                if(extensions.contains(FilenameUtils.getExtension(f.getName()))){
                 Runnable worker = new WorkerThread(f,INPUT_FOLDER,OUTPUT_FOLDER,COMPRESSION_LEVEL,COMPRESSION_LEVEL_STEP,EXPECTED_SIZE);
-                executor.execute(worker);
+                executor.execute(worker);}
             }
 
+        }} catch(NullPointerException e){
+            System.out.println("W folderze nie ma plików");
         }
         executor.shutdown();
         while (!executor.isTerminated()) {   }
