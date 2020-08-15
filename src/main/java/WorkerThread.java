@@ -5,11 +5,11 @@ import java.io.File;
 import java.io.IOException;
 
 public class WorkerThread implements Runnable{
-    private String OUTPUT_FOLDER = ".";
-    private String INPUT_FOLDER = "./compressed";
-    private double COMPRESSION_LEVEL = 0.9;
-    private double COMPRESSION_LEVEL_STEP = 0.01;
-    private Long EXPECTED_SIZE = 500000L;
+    private String OUTPUT_FOLDER = DefaultSettings.OUTPUT_FOLDER;
+    private String INPUT_FOLDER = DefaultSettings.INPUT_FOLDER;
+    private double COMPRESSION_LEVEL = DefaultSettings.COMPRESSION_LEVEL;
+    private double COMPRESSION_LEVEL_STEP = DefaultSettings.COMPRESSION_LEVEL_STEP;
+    private Long EXPECTED_SIZE = DefaultSettings.EXPECTED_SIZE;
     private File FILE = null;
     WorkerThread(File file,String inputFolder,String outputFolder,double compressionLevel,double compressionLevelStep,Long expectedSize){
         FILE = file;
@@ -27,7 +27,7 @@ public class WorkerThread implements Runnable{
         while(size>EXPECTED_SIZE){
             size = compress(FILE,COMPRESSION_LEVEL-COMPRESSION_LEVEL_STEP*i++);
         }
-        System.out.println("File: "+FILE.getName()+"; Size after: "+new File(OUTPUT_FOLDER+"\\"+FILE.getName()).length());
+        System.out.println("File: "+FILE.getName()+"; Size after: "+new File(OUTPUT_FOLDER+File.separator+FILE.getName()).length());
 
     }
     private Long compress(File file, double compressionLevel){
@@ -44,7 +44,7 @@ public class WorkerThread implements Runnable{
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
-        return new File(OUTPUT_FOLDER+"\\"+file.getName()).length();
+        return new File(OUTPUT_FOLDER+File.separator+file.getName()).length();
 
     }
 }

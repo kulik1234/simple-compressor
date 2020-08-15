@@ -2,17 +2,18 @@ import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Main {
 
-    private String OUTPUT_FOLDER = "./compressed";
-    private String INPUT_FOLDER = ".";
-    private double COMPRESSION_LEVEL = 0.9;
-    private double COMPRESSION_LEVEL_STEP = 0.01;
-    private Long EXPECTED_SIZE = 500000L;
+    private String OUTPUT_FOLDER = DefaultSettings.OUTPUT_FOLDER;
+    private String INPUT_FOLDER = DefaultSettings.INPUT_FOLDER;
+    private double COMPRESSION_LEVEL = DefaultSettings.COMPRESSION_LEVEL;
+    private double COMPRESSION_LEVEL_STEP = DefaultSettings.COMPRESSION_LEVEL_STEP;
+    private Long EXPECTED_SIZE = DefaultSettings.EXPECTED_SIZE;
 
 
         public static void main(String[] args) {
@@ -23,7 +24,11 @@ public class Main {
             if(args[i].equals("-i")) {
                 if(new File(args[i+1]).exists()){
                     INPUT_FOLDER = args[i+1];
+                    OUTPUT_FOLDER = INPUT_FOLDER+File.separator+"compressed";
                     continue;
+                }
+                else {
+                    System.out.println("Podany folder: \""+args[i+1]+"\" nie istnieje");
                 }
             }
             if(args[i].equals("-o")) {
@@ -64,8 +69,11 @@ public class Main {
             if(!f.isDirectory()){
                 List<String> extensions = new ArrayList<String>();
                 extensions.add("jpg");
+                extensions.add("JPG");
+                extensions.add("JPEG");
                 extensions.add("jpeg");
                 extensions.add("png");
+                extensions.add("PNG");
                 if(extensions.contains(FilenameUtils.getExtension(f.getName()))){
                 Runnable worker = new WorkerThread(f,INPUT_FOLDER,OUTPUT_FOLDER,COMPRESSION_LEVEL,COMPRESSION_LEVEL_STEP,EXPECTED_SIZE);
                 executor.execute(worker);}
